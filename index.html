@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Development</title>
+    </head>
+    <body>
+        <div id="sales_widget"></div>
+        <script type="application/javascript" src="app.bundle.js"></script>
+        <script>
+          const SalesWidget = new ISLoader('sales');
+          SalesWidget.init({
+            entity: 7,
+            container: '#sales_widget',
+            // footer: false,
+            // header: false,
+            // filters: false
+          });
+        </script>
+    </body>
+</html>
