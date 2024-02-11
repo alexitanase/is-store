@@ -9,7 +9,7 @@
           </template>
 
           <template #cell(price)="data">
-            {{ parseFloat(data.value).toFixed(entity.Currency.Decimal) }} <span v-html="entity.Currency.Code"></span>
+            {{ parseFloat(data.value).toFixed(entity.Currency.Decimal) }} <span v-html="Currencies.symbolFormat(entity.Currency.Code)"></span>
           </template>
 
           <template #cell(id)="data">
@@ -22,21 +22,22 @@
         </div>
       </b-col>
     </b-row>
+    <hr />
     <b-row class="mt-4">
       <b-col cols="12" md="4">
         <h3>Order summary</h3>
         <table class="w-100">
           <tr>
             <td>Subtotal</td>
-            <td style="text-align: right;">{{ totalAmountCart().toFixed(entity.Currency.Decimal) }}</td>
+            <td style="text-align: right;">{{ totalAmountCart().toFixed(entity.Currency.Decimal) }} <span v-html="Currencies.symbolFormat(entity.Currency.Code)"></span></td>
           </tr>
           <tr>
             <td>Shipping costs</td>
-            <td style="text-align: right;">0.00</td>
+            <td style="text-align: right;">0.00 <span v-html="Currencies.symbolFormat(entity.Currency.Code)"></span></td>
           </tr>
           <tr style="font-size:24px;font-weight: bold;" class="text-danger">
             <td>Total</td>
-            <td style="text-align: right;">{{ totalAmountCart().toFixed(entity.Currency.Decimal) }}</td>
+            <td style="text-align: right;">{{ totalAmountCart().toFixed(entity.Currency.Decimal) }} <span v-html="Currencies.symbolFormat(entity.Currency.Code)"></span></td>
           </tr>
         </table>
       </b-col>
@@ -53,12 +54,16 @@
 <script>
 import {generalStore} from "../../../stores/general.store";
 import {cartStore} from "../../../stores/cart.store";
+import Currencies from "../../../utils/Currencies";
 
 export default {
   name: "cart-layout",
   components: {},
   props: ["entity"],
   computed: {
+    Currencies() {
+      return Currencies
+    },
     generalStore(){
       return generalStore;
     },
@@ -78,8 +83,6 @@ export default {
     }
   },
   methods: {
-    cartStore,
-    generalStore,
     removeCartItem(id){
       let cartDetails = cartStore().products;
       let newCart = [];

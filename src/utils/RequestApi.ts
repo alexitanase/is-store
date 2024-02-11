@@ -29,6 +29,10 @@ export class RequestApi {
     this._baseUrl = value;
   }
 
+  constructor(endpoint) {
+    this.baseUrl = endpoint;
+  }
+
   private buildParams(data: object): string {
     const params = new URLSearchParams()
 
@@ -47,9 +51,6 @@ export class RequestApi {
     return axios.create({
       baseURL: this.baseUrl,
       withCredentials: false,
-      transformRequest: [function (data, headers) {
-        return data ? this.buildParams(data) : null;
-      }.bind(this)],
       ...options,
       headers: {
         ...this.headers

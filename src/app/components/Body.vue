@@ -5,17 +5,14 @@
 
       <div v-if="generalStore().actualStep === 1" class="application-sale-body-select-product">
 
-        <b-container v-if="generalStore().showMessageCart">
-          <b-row>
-            <b-col>
-              <div class="alert alert-info mt-3 mb-3">Product added to cart. &nbsp; <b-button v-on:click="generalStore().actualStep = 3">View cart</b-button></div>
-            </b-col>
-          </b-row>
+        <b-container>
+          <alert-added-to-cart-layout />
         </b-container>
 
         <b-container>
           <b-row v-if="Settings.filters">
             <b-col cols="12" md="4">
+              <label style="text-align: right;">Search product <BIconSearch /></label>
               <b-input-group prepend="@" class="mb-2 mr-sm-2 mb-sm-0">
                 <b-form-input v-model="Filters.SearchByName" placeholder="Search..."></b-form-input>
               </b-input-group>
@@ -24,6 +21,7 @@
 
             </b-col>
             <b-col cols="12" md="4">
+              <label style="text-align: right;">Order by <BIconFilter /></label>
               <b-form-select v-model="Filters.OrderBy" :options="Filters.OrderByOptions"></b-form-select>
             </b-col>
           </b-row>
@@ -35,7 +33,11 @@
       </div>
 
       <div v-if="generalStore().actualStep === 2" class="application-sale-body-product-details">
-        <p>product details</p>
+
+        <product-details-layout
+          :entity="entity"
+        ></product-details-layout>
+
       </div>
 
       <div v-if="generalStore().actualStep === 3" class="application-sale-body-cart">
@@ -47,14 +49,26 @@
       </div>
 
       <div v-if="generalStore().actualStep === 4" class="application-sale-body-checkout">
-        <p>checkout</p>
-      </div>
 
-      <div v-if="generalStore().actualStep === 5" class="application-sale-body-payment-method">
-        <p>Confirmation</p>
+        <checkout-layout
+          :entity="entity"
+        ></checkout-layout>
+
       </div>
 
       <div v-if="generalStore().actualStep === 6" class="application-sale-body-payment-method">
+
+        <payment-layout
+          :entity="entity"
+        ></payment-layout>
+
+      </div>
+
+      <div v-if="generalStore().actualStep === 7" class="application-sale-body-payment-method">
+        <p>Confirmation</p>
+      </div>
+
+      <div v-if="generalStore().actualStep === 8" class="application-sale-body-payment-method">
         <p>Error</p>
       </div>
 
@@ -68,10 +82,14 @@ import {RequestApi} from "../../utils/RequestApi";
 import ProductLayout from "./elements/Product.vue";
 import {generalStore} from "../../stores/general.store";
 import CartLayout from "./elements/Cart.vue";
+import CheckoutLayout from "./elements/Checkout.vue";
+import ProductDetailsLayout from "./elements/ProductDetails.vue";
+import AlertAddedToCartLayout from "./elements/AlertAddedToCart.vue";
+import PaymentLayout from "./elements/Payment.vue";
 
 export default {
   name: "body-layout",
-  components: {CartLayout, ProductLayout},
+  components: {PaymentLayout, AlertAddedToCartLayout, ProductDetailsLayout, CheckoutLayout, CartLayout, ProductLayout},
   props: ["entity"],
   computed: {
     Settings() {
@@ -102,6 +120,8 @@ export default {
           Name: '',
           Picture: '',
           Price: 0,
+          MinPerSale: 0,
+          MaxPerSale: 0
         },
         {
           Id: 0,
@@ -109,6 +129,8 @@ export default {
           Name: '',
           Picture: '',
           Price: 0,
+          MinPerSale: 0,
+          MaxPerSale: 0
         },
         {
           Id: 0,
@@ -116,6 +138,8 @@ export default {
           Name: '',
           Picture: '',
           Price: 0,
+          MinPerSale: 0,
+          MaxPerSale: 0
         },
         {
           Id: 0,
@@ -123,15 +147,15 @@ export default {
           Name: '',
           Picture: '',
           Price: 0,
+          MinPerSale: 0,
+          MaxPerSale: 0
         }
       ]
     }
   },
   methods: {
-    generalStore,
     async getProducts(){
-      let Request = new RequestApi();
-      Request.baseUrl = 'http://widget.anvil.test/';
+      let Request = new RequestApi(Settings.endpoint);
       Request.add_header('Entity', Settings.entity);
 
       let Data = {};
@@ -153,6 +177,11 @@ export default {
     }
   },
   async beforeMount(){
+    if(parseInt(Settings.product) !== 0){
+      generalStore().actualStep = 2;
+      console.debug("Es necesario cargar pagina del producto.");
+    }
+
     await this.getProducts();
   },
   watch: {

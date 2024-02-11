@@ -1,18 +1,17 @@
 <template>
   <b-col cols="12" md="4" class="application-sales-product mb-3">
     <div v-if="typeof Product.Demo !== 'undefined'">
-      <b-skeleton-img animation></b-skeleton-img>
       <p class="application-sales-product-name">
         <b-skeleton animation width="85%" style="margin:auto;"></b-skeleton>
         <span><b-skeleton animation width="55%" style="margin:auto;margin-top:5px;"></b-skeleton></span>
       </p>
     </div>
-    <div v-if="typeof Product.Demo === 'undefined'">
+    <div v-if="typeof Product.Demo === 'undefined'" v-on:click="openProductDetails(Product)">
       <img v-if="Product.Picture !== '' && Product.Picture !== null" :src="Product.Picture" />
       <img v-if="Product.Picture === '' || Product.Picture === null" :src="'assets/images/product-default.png'" />
       <p class="application-sales-product-name">
         {{ Product.Name }}
-        <span>{{ parseFloat(Product.Price).toFixed(parseInt(entity.Currency.Decimal)) }} <i v-html="currencyCodeSymbol(entity.Currency.Code)"></i></span>
+        <span>{{ parseFloat(Product.Price).toFixed(parseInt(entity.Currency.Decimal)) }} <i v-html="Currencies.symbolFormat(entity.Currency.Code)"></i></span>
       </p>
     </div>
     <b-button v-on:click="addToCart(Product)" variant="warning">
@@ -25,18 +24,21 @@
 
 import {cartStore} from "../../../stores/cart.store";
 import {generalStore} from "../../../stores/general.store";
+import Currencies from "../../../utils/Currencies";
+import {Settings} from "../../../config/Settings";
 
 export default {
   name: "product-layout",
+  computed: {
+    Currencies() {
+      return Currencies
+    }
+  },
   props: ["Product", "entity"],
   methods: {
-    currencyCodeSymbol(code) {
-      switch (code) {
-        case "EUR":
-          return '&euro;';
-        default:
-          return code;
-      }
+    openProductDetails(product){
+      Settings.product = product.Id;
+      generalStore().actualStep = 2;
     },
     addToCart(product){
 
@@ -51,13 +53,15 @@ export default {
       if(exists === -1){
         cartStore().products.push({
           id: product.Id,
-          qty: 1,
+          qty: product.MinPerSale,
           name: product.Name,
           price: product.Price,
           picture: product.Picture
         })
       }else{
-        cartStore().products[exists].qty++;
+        if(parseInt(product.MaxPerSale) > parseInt(cartStore().products[exists].qty)){
+          cartStore().products[exists].qty++;
+        }
       }
 
       generalStore().showMessageCart = true;

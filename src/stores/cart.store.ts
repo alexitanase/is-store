@@ -4,7 +4,8 @@ export const cartStore = defineStore(
   'Cart',
   {
     state: () => ({
-      products: []
+      products: [],
+      checkoutToken: ""
     }),
     actions: {
 

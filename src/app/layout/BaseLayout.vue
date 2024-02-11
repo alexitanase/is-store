@@ -57,8 +57,7 @@ export default {
   },
   methods: {
     async getEntityDetails() {
-      let Request = new RequestApi();
-      Request.baseUrl = 'http://widget.anvil.test/';
+      let Request = new RequestApi(Settings.endpoint);
       Request.add_header('Entity', Settings.entity);
       let response = await Request.doAsync({
         method: "get",
