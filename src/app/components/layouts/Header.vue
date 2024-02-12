@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import {Settings} from "../../config/Settings";
-import {cartStore} from "../../stores/cart.store";
-import {generalStore} from "../../stores/general.store";
+import {Settings} from "../../../config/Settings";
+import {cartStore} from "../../../stores/cart.store";
+import {generalStore} from "../../../stores/general.store";
 
 export default {
   name: "header-layout",

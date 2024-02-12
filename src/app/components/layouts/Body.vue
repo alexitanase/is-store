@@ -77,15 +77,15 @@
 </template>
 
 <script>
-import {Settings} from "../../config/Settings";
-import {RequestApi} from "../../utils/RequestApi";
-import ProductLayout from "./elements/Product.vue";
-import {generalStore} from "../../stores/general.store";
-import CartLayout from "./elements/Cart.vue";
-import CheckoutLayout from "./elements/Checkout.vue";
-import ProductDetailsLayout from "./elements/ProductDetails.vue";
-import AlertAddedToCartLayout from "./elements/AlertAddedToCart.vue";
-import PaymentLayout from "./elements/Payment.vue";
+import {Settings} from "../../../config/Settings";
+import {RequestApi} from "../../../utils/RequestApi";
+import ProductLayout from "../elements/Product.vue";
+import {generalStore} from "../../../stores/general.store";
+import CartLayout from "../pages/Cart.vue";
+import CheckoutLayout from "../pages/Checkout.vue";
+import ProductDetailsLayout from "../pages/ProductDetails.vue";
+import AlertAddedToCartLayout from "../elements/AlertAddedToCart.vue";
+import PaymentLayout from "../pages/Payment.vue";
 
 export default {
   name: "body-layout",

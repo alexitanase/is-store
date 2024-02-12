@@ -21,6 +21,7 @@
         <p class="mt-0 mb-0">Date & time: <b>{{ Operation.Datetime }}</b></p>
         <p class="mt-0 mb-0">Status: <b>{{ Operation.Status }}</b></p>
         <p class="mt-0">Payment method: <b>{{ Operation.PaymentMethod.Name }}</b></p>
+        <a v-if="Operation.Status === 'PENDING'" :href="Settings.endpoint + 'api/payment/' + Operation.Token" class="btn btn-outline-success mt-3">Pay now <BIconShieldFillCheck /></a>
       </b-col>
 
       <b-col col="12" md="6">
@@ -58,6 +59,9 @@ export default {
   components: {},
   props: ["entity"],
   computed: {
+    Settings() {
+      return Settings
+    },
     Currencies() {
       return Currencies
     },

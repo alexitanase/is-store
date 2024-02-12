@@ -8,8 +8,10 @@
         </div>
       </b-col>
       <b-col col="12" md="8">
-        <h3>{{ Product.Name }} [{{ Product.ShortName }}]</h3>
-        <span class="text-muted">{{ Product.Category }}</span>
+        <h3>{{ Product.Name }}</h3>
+        <span style="font-size:14px;">SKU: <b>{{ Product.ShortName }}</b></span>
+        <br/>
+        <span style="font-size:14px;">Category: <b>{{ Product.Category }}</b></span>
         <p class="product-price">
           {{ parseFloat(Product.SalePrice).toFixed(entity.Currency.Decimal) }} <span v-html="Currencies.symbolFormat(entity.Currency.Code)"></span>
         </p>
@@ -21,14 +23,31 @@
         <div>
           <b-button variant="warning" v-on:click="addToCart(Product)">Add to cart</b-button>
           &nbsp;
-          <b-button variant="primary">Buy now</b-button>
+          <b-button variant="primary" v-on:click="addToCart(Product, 1)">Buy now</b-button>
+        </div>
+        <p class="mt-3">
+          <BIconShare /> &nbsp; Share: &nbsp;
+          <a :href="'https://twitter.com/share?url=http://localhost:8080/'"  target="_blank"><BIconTwitterX /></a> &nbsp;
+          <a href="https://www.facebook.com/sharer.php?u=http://localhost:8080/" target="_blank"><BIconFacebook /></a> &nbsp;
+          <a href="https://telegram.me/share/?url=http://localhost:8080/" target="_blank"><BIconTelegram /></a>
+        </p>
+        <div class="card mt-3">
+          <div class="card-body text-center">
+            <img :src="'assets/images/payment-icons.png'" />
+            <br />
+            Guaranteed Safe And Secure Checkout
+          </div>
         </div>
       </b-col>
     </b-row>
-    <hr />
-    <b-row>
+    <b-row class="mt-3">
       <b-col>
-        <div v-html="Product.Description" class="mb-4"></div>
+        <ul class="nav nav-tabs mb-3">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Description</a>
+          </li>
+        </ul>
+        <div  class="mb-4" v-html="Product.Description"></div>
       </b-col>
     </b-row>
   </b-container>
@@ -62,7 +81,7 @@ import {cartStore} from "../../../stores/cart.store";
 import Currencies from "../../../utils/Currencies";
 import {RequestApi} from "../../../utils/RequestApi";
 import {Settings} from "../../../config/Settings";
-import AlertAddedToCartLayout from "./AlertAddedToCart.vue";
+import AlertAddedToCartLayout from "../elements/AlertAddedToCart.vue";
 
 export default {
   name: "product-details-layout",
@@ -127,7 +146,7 @@ export default {
 
       this.Loading = false;
     },
-    addToCart(product){
+    addToCart(product, checkout){
 
       let exists = -1;
 
@@ -163,6 +182,10 @@ export default {
 
       generalStore().showMessageCart = true;
 
+      if(typeof checkout !== 'undefined'){
+        generalStore().actualStep = 4;
+      }
+
       setTimeout(function(){
         generalStore().showMessageCart = false;
       }, 5000);
@@ -187,9 +210,9 @@ p.product-price {
 }
 .picture-image {
   width: 100%;
-  border: 1px solid #c0c0c0;
+  border: 1px solid #dcdcdc;
+  border-radius: 7.5px;
   padding: 25px;
-  min-height: 320px;
 }
 .picture-image > img {
   width: 100%;

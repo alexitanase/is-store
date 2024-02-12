@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import {Settings} from "../../config/Settings";
+import {Settings} from "../../../config/Settings";
 
 export default {
   name: "footer-layout",

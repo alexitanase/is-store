@@ -22,11 +22,11 @@
 
 <script>
 
-import FooterLayout from "../components/Footer.vue";
-import HeaderLayout from "../components/Header.vue";
+import FooterLayout from "../components/layouts/Footer.vue";
+import HeaderLayout from "../components/layouts/Header.vue";
 import {RequestApi} from "../../utils/RequestApi";
 import {Settings} from "../../config/Settings";
-import BodyLayout from "../components/Body.vue";
+import BodyLayout from "../components/layouts/Body.vue";
 import {cartStore} from "../../stores/cart.store";
 
 export default {
