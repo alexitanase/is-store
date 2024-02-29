@@ -3,11 +3,12 @@
     <b-container class="mb-3">
       <b-row>
         <b-col cols="12" md="6">
-          <h1 class="mt-3 cursor-pointer" v-on:click="generalStore().actualStep = 1">{{ entity.Name }}</h1>
+          <img class="logo" v-if="(entity.Picture !== null && entity.Picture !== '')" :src="entity.Picture"  :alt="entity.Name" v-on:click="this.$router.push({ path: '/' })" />
+          <h1 v-if="(entity.Picture === null || entity.Picture === '')" class="mt-3 cursor-pointer" v-on:click="this.$router.push({ path: '/' })">{{ entity.Name }}</h1>
           <p class="mb-0" v-html="entity.Description"></p>
         </b-col>
         <b-col cols="12" md="6" class="position-relative">
-          <div class="application-sale-cart" v-on:click="generalStore().actualStep = 3">
+          <div class="application-sale-cart" v-on:click="this.$router.push({ path: '/cart' })">
             <span>{{ getTotalItems() }}</span>
             <BIconCart />
           </div>
@@ -18,6 +19,7 @@
 </template>
 
 <script>
+import {useRouter} from 'vue-router'
 import {Settings} from "../../../config/Settings";
 import {cartStore} from "../../../stores/cart.store";
 import {generalStore} from "../../../stores/general.store";
@@ -85,6 +87,10 @@ export default {
   z-index: 1;
 }
 .cursor-pointer {
+  cursor: pointer;
+}
+img.logo {
+  max-height: 90px;
   cursor: pointer;
 }
 </style>

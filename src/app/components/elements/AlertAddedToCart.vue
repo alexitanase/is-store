@@ -1,7 +1,7 @@
 <template>
   <b-row v-if="generalStore().showMessageCart">
     <b-col>
-      <div class="alert alert-info mt-3 mb-3">Product added to cart. &nbsp; <b-button v-on:click="generalStore().actualStep = 3">View cart</b-button></div>
+      <div class="alert alert-info mt-3 mb-3">Product added to cart. &nbsp; <b-button v-on:click="this.$router.push({ path: '/cart' })">View cart</b-button></div>
     </b-col>
   </b-row>
 </template>

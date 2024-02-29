@@ -1,78 +1,83 @@
 <template>
-  <b-container v-show="!Loading">
-    <b-row>
-      <b-col col="12" md="4">
-        <div class="picture-image">
-          <img class="first-picture-product" v-if="Product.Picture !== '' && Product.Picture !== null" :src="Product.Picture" />
-          <img class="first-picture-product" v-if="Product.Picture === '' || Product.Picture === null" :src="'assets/images/product-default.png'" />
-        </div>
-      </b-col>
-      <b-col col="12" md="8">
-        <h3>{{ Product.Name }}</h3>
-        <span style="font-size:14px;">SKU: <b>{{ Product.ShortName }}</b></span>
-        <br/>
-        <span style="font-size:14px;">Category: <b>{{ Product.Category }}</b></span>
-        <p class="product-price">
-          {{ parseFloat(Product.SalePrice).toFixed(entity.Currency.Decimal) }} <span v-html="Currencies.symbolFormat(entity.Currency.Code)"></span>
-        </p>
-        <p class="text-success" v-if="Product.Stock > 0 || Product.Stock === -1">In stock</p>
-        <div v-if="Product.MaxPerSale > 1">
-          <b-form-select v-model="qtySelected" :options="qtyOptions" class="mb-3"></b-form-select>
-        </div>
-        <alert-added-to-cart-layout />
-        <div>
-          <b-button variant="warning" v-on:click="addToCart(Product)">Add to cart</b-button>
-          &nbsp;
-          <b-button variant="primary" v-on:click="addToCart(Product, 1)">Buy now</b-button>
-        </div>
-        <p class="mt-3">
-          <BIconShare /> &nbsp; Share: &nbsp;
-          <a :href="'https://twitter.com/share?url=http://localhost:8080/'"  target="_blank"><BIconTwitterX /></a> &nbsp;
-          <a href="https://www.facebook.com/sharer.php?u=http://localhost:8080/" target="_blank"><BIconFacebook /></a> &nbsp;
-          <a href="https://telegram.me/share/?url=http://localhost:8080/" target="_blank"><BIconTelegram /></a>
-        </p>
-        <div class="card mt-3">
-          <div class="card-body text-center">
-            <img :src="'assets/images/payment-icons.png'" />
-            <br />
-            Guaranteed Safe And Secure Checkout
+  <div class="application-sale-body-product-details">
+
+    <b-container v-show="!Loading">
+      <b-row>
+        <b-col col="12" md="4">
+          <div class="picture-image">
+            <img class="first-picture-product" v-if="Product.Picture !== '' && Product.Picture !== null" :src="Product.Picture" />
+            <img class="first-picture-product" v-if="Product.Picture === '' || Product.Picture === null" :src="'assets/images/product-default.png'" />
           </div>
-        </div>
-      </b-col>
-    </b-row>
-    <b-row class="mt-3">
-      <b-col>
-        <ul class="nav nav-tabs mb-3">
-          <li class="nav-item">
-            <a class="nav-link active" href="#">Description</a>
-          </li>
-        </ul>
-        <div  class="mb-4" v-html="Product.Description"></div>
-      </b-col>
-    </b-row>
-  </b-container>
-  <b-container v-show="Loading">
-    <b-row>
-      <b-col col="12" md="6">
-        <div class="picture-image">
-          <b-skeleton-img aspect="3:1"></b-skeleton-img>
-        </div>
-      </b-col>
-      <b-col col="12" md="6">
-        <b-skeleton animation="wave" width="85%"></b-skeleton>
-        <b-skeleton animation="wave" width="55%"></b-skeleton>
-        <b-skeleton animation="wave" width="70%"></b-skeleton>
-      </b-col>
-    </b-row>
-    <hr />
-    <b-row>
-      <b-col>
-        <b-skeleton animation="fade" width="85%"></b-skeleton>
-        <b-skeleton animation="fade" width="55%"></b-skeleton>
-        <b-skeleton animation="fade" width="70%"></b-skeleton>
-      </b-col>
-    </b-row>
-  </b-container>
+        </b-col>
+        <b-col col="12" md="8">
+          <h3>{{ Product.Name }}</h3>
+          <span style="font-size:14px;">SKU: <b>{{ Product.ShortName }}</b></span>
+          <br/>
+          <span style="font-size:14px;">Category: <b>{{ Product.Category }}</b></span>
+          <p class="product-price">
+            {{ parseFloat(Product.SalePrice).toFixed(entity.Currency.Decimal) }} <span v-html="Currencies.symbolFormat(entity.Currency.Code)"></span>
+          </p>
+          <p class="text-success" v-if="Product.Stock > 0 || Product.Stock === -1">In stock</p>
+          <div v-if="Product.MaxPerSale > 1">
+            <b-form-select v-model="qtySelected" :options="qtyOptions" class="mb-3"></b-form-select>
+          </div>
+          <alert-added-to-cart-layout />
+          <div>
+            <b-button variant="warning" v-on:click="addToCart(Product)">Add to cart</b-button>
+            &nbsp;
+            <b-button variant="primary" v-on:click="addToCart(Product, 1)">Buy now</b-button>
+          </div>
+          <p class="mt-3">
+            <BIconShare /> &nbsp; Share: &nbsp;
+            <a :href="'https://twitter.com/share?url=' + getProductUrl()"  target="_blank"><BIconTwitterX /></a> &nbsp;
+            <a :href="'https://www.facebook.com/sharer.php?u=' + getProductUrl()" target="_blank"><BIconFacebook /></a> &nbsp;
+            <a :href="'https://telegram.me/share/?url=' + getProductUrl()" target="_blank"><BIconTelegram /></a> &nbsp;
+            <!--          <a href="https://plus.google.com/share?url=http://localhost:8080/" target="_blank"><BIconGoogle /></a>-->
+          </p>
+          <div class="card mt-3">
+            <div class="card-body text-center">
+              <img :src="'assets/images/payment-icons.png'" />
+              <br />
+              Guaranteed Safe And Secure Checkout
+            </div>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row class="mt-3">
+        <b-col>
+          <ul class="nav nav-tabs mb-3">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Description</a>
+            </li>
+          </ul>
+          <div  class="mb-4" v-html="Product.Description"></div>
+        </b-col>
+      </b-row>
+    </b-container>
+    <b-container v-show="Loading">
+      <b-row>
+        <b-col col="12" md="6">
+          <div class="picture-image">
+            <b-skeleton-img aspect="3:1"></b-skeleton-img>
+          </div>
+        </b-col>
+        <b-col col="12" md="6">
+          <b-skeleton animation="wave" width="85%"></b-skeleton>
+          <b-skeleton animation="wave" width="55%"></b-skeleton>
+          <b-skeleton animation="wave" width="70%"></b-skeleton>
+        </b-col>
+      </b-row>
+      <hr />
+      <b-row>
+        <b-col>
+          <b-skeleton animation="fade" width="85%"></b-skeleton>
+          <b-skeleton animation="fade" width="55%"></b-skeleton>
+          <b-skeleton animation="fade" width="70%"></b-skeleton>
+        </b-col>
+      </b-row>
+    </b-container>
+
+  </div>
 </template>
 
 <script>
@@ -126,12 +131,12 @@ export default {
       Request.add_header('Entity', Settings.entity);
       let response = await Request.doAsync({
         method: "get",
-        url: "api/products/" + Settings.product,
+        url: "api/products/" + this.$route.params.id,
       });
 
       if(response.Error){
-        generalStore().actualStep = 1;
         this.Loading = false;
+        this.$router.push({ path: '/' });
         return false;
       }
 
@@ -183,22 +188,21 @@ export default {
       generalStore().showMessageCart = true;
 
       if(typeof checkout !== 'undefined'){
-        generalStore().actualStep = 4;
+        this.$router.push({ path: '/checkout' });
       }
 
       setTimeout(function(){
         generalStore().showMessageCart = false;
       }, 5000);
 
+    },
+    getProductUrl(){
+      return window.location.toString();
     }
   },
   async beforeMount() {
-    if(parseInt(Settings.product) > 0){
-      this.Loading = true;
-      await this.getProductDetails();
-    }else{
-      generalStore().actualStep = 1;
-    }
+    this.Loading = true;
+    await this.getProductDetails();
   }
 }
 </script>

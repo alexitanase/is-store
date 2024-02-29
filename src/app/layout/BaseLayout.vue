@@ -47,6 +47,7 @@ export default {
       entity: {
         Name: '',
         Description: '',
+        Picture: '',
         Currency: {
           Name: '',
           Code: '',
@@ -73,11 +74,17 @@ export default {
       this.entity.Name = response.Message.Name;
       this.entity.Description = response.Message.Description;
       this.entity.Currency = response.Message.Currency;
+      this.entity.Picture = response.Message.Picture;
     }
   },
   async beforeMount() {
     await this.getEntityDetails();
     this.CartDetails = cartStore().products;
+    if(Settings.product !== '0'){
+      this.$router.push({path: '/product/'+Settings.product});
+    }else if(Settings.operation !== ''){
+      this.$router.push({path: '/operation/'+Settings.operation});
+    }
   },
   computed: {
     Settings() {

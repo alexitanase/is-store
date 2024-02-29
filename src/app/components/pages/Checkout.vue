@@ -1,65 +1,67 @@
 <template>
-  <b-container>
-    <b-row v-show="errorMessage !== ''">
-      <b-col class="mb-3">
-        <div class="alert alert-warning" role="alert">
-          <BIconExclamationTriangle /> {{ errorMessage }}
-        </div>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col col="12" md="6" v-for="Input in requiredData" class="mb-4">
+  <div class="application-sale-body-checkout">
+    <b-container>
+      <b-row v-show="errorMessage !== ''">
+        <b-col class="mb-3">
+          <div class="alert alert-warning" role="alert">
+            <BIconExclamationTriangle /> {{ errorMessage }}
+          </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col col="12" md="6" v-for="Input in requiredData" class="mb-4">
 
-        <div class="mb-3">
-          <label class="form-label">{{ Input.Label }} <span v-if="Input.Required" class="text-danger">*</span></label>
-          <input v-if="Input.Type === 'input:text'" :name="Input.Name" v-model="modelData[Input.Name]" type="text" class="form-control" :placeholder="Input.Label" />
-          <input v-if="Input.Type === 'input:email'" :name="Input.Name" v-model="modelData[Input.Name]" type="email" class="form-control" :placeholder="Input.Label" />
-        </div>
+          <div class="mb-3">
+            <label class="form-label">{{ Input.Label }} <span v-if="Input.Required" class="text-danger">*</span></label>
+            <input v-if="Input.Type === 'input:text'" :name="Input.Name" v-model="modelData[Input.Name]" type="text" class="form-control" :placeholder="Input.Label" />
+            <input v-if="Input.Type === 'input:email'" :name="Input.Name" v-model="modelData[Input.Name]" type="email" class="form-control" :placeholder="Input.Label" />
+          </div>
 
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col class="mb-3">
-        <table class="w-100 table table-bordered">
-          <tr>
-            <td>Subtotal ({{ totalItemsCart() }} products)</td>
-            <td style="text-align: right;">{{ totalAmountCart().toFixed(entity.Currency.Decimal) }} <span v-html="Currencies.symbolFormat(entity.Currency.Code)"></span></td>
-          </tr>
-          <tr>
-            <td>Total</td>
-            <td style="text-align: right;">{{ totalAmountCart().toFixed(entity.Currency.Decimal) }} <span v-html="Currencies.symbolFormat(entity.Currency.Code)"></span></td>
-          </tr>
-        </table>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col v-show="paymentMethods.length > 1" class="mb-5">
-        <div v-for="Payment in paymentMethods" class="list-group">
-          <a v-on:click="selectPaymentMethod(Payment.Id)" href="#" class="list-group-item list-group-item-action" :class="typeof Payment.Selected !== 'undefined' && Payment.Selected ? 'active' : ''">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">{{ Payment.Name }}</h5>
-              <small>Card debit & credit</small>
-            </div>
-            <p class="mb-1">Some placeholder content in a paragraph.</p>
-            <small>And some small print.</small>
-          </a>
-        </div>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col col="12" md="8">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" v-model="termsAccepted" id="terms-more">
-          <label class="form-check-label" for="terms-more">
-            By completing your order you accept our Conditions of use and sale. See our Privacy Notice, our Cookies Notice.
-          </label>
-        </div>
-      </b-col>
-      <b-col col="12" md="4" style="text-align: right;">
-        <b-button v-on:click="placeOrder()" :disabled="disableButtonContinue" variant="primary">Continue <BIconShieldFillCheck /></b-button>
-      </b-col>
-    </b-row>
-  </b-container>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col class="mb-3">
+          <table class="w-100 table table-bordered">
+            <tr>
+              <td>Subtotal ({{ totalItemsCart() }} products)</td>
+              <td style="text-align: right;">{{ totalAmountCart().toFixed(entity.Currency.Decimal) }} <span v-html="Currencies.symbolFormat(entity.Currency.Code)"></span></td>
+            </tr>
+            <tr>
+              <td>Total</td>
+              <td style="text-align: right;">{{ totalAmountCart().toFixed(entity.Currency.Decimal) }} <span v-html="Currencies.symbolFormat(entity.Currency.Code)"></span></td>
+            </tr>
+          </table>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col v-show="paymentMethods.length > 1" class="mb-5">
+          <div class="list-group">
+            <a v-for="Payment in paymentMethods" v-on:click="selectPaymentMethod(Payment.Id)" href="#" class="list-group-item list-group-item-action" :class="typeof Payment.Selected !== 'undefined' && Payment.Selected ? 'active' : ''">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ Payment.Name }}</h5>
+                <small>Card debit & credit</small>
+              </div>
+              <p class="mb-1">Some placeholder content in a paragraph.</p>
+              <small>And some small print.</small>
+            </a>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col col="12" md="8">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" v-model="termsAccepted" id="terms-more">
+            <label class="form-check-label" for="terms-more">
+              By completing your order you accept our Conditions of use and sale. See our Privacy Notice, our Cookies Notice.
+            </label>
+          </div>
+        </b-col>
+        <b-col col="12" md="4" style="text-align: right;">
+          <b-button v-on:click="placeOrder()" :disabled="disableButtonContinue" variant="primary">Continue <BIconShieldFillCheck /></b-button>
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
 </template>
 
 <script>
@@ -106,7 +108,7 @@ export default {
       });
 
       if(response.Error){
-        generalStore().actualStep = 1;
+        this.$router.push({ path: '/' })
         return false;
       }
 
@@ -121,7 +123,7 @@ export default {
       });
 
       if(response.Error){
-        generalStore().actualStep = 1;
+        this.$router.push({ path: '/' })
         return false;
       }
 
@@ -213,8 +215,8 @@ export default {
       Request.add_header('Entity', Settings.entity);
       Request.add_header('Content-Type', 'application/json');
       let response = await Request.doAsync({
-        method: "post",
-        url: "api/payment",
+        method: "put",
+        url: "api/operations",
         data: Data
       });
 
@@ -224,14 +226,16 @@ export default {
         return false;
       }
 
-      cartStore().checkoutToken = response.Message;
+      cartStore().checkoutToken = response.Message.Token;
       cartStore().products = [];
-      generalStore().actualStep = 6;
+      this.$router.push({ path: '/operation/'+response.Message.Token });
       this.disableButtonContinue = false;
 
-      setTimeout(function(){
-        window.location = Settings.endpoint + 'api/payment/' + response.Message;
-      }, 500);
+      if(response.Message.Status === 'PENDING'){
+        setTimeout(function(){
+          window.location = Settings.endpoint + 'api/payment/' + response.Message.Token;
+        }, 500);
+      }
 
     },
     showErrorMessage(message){

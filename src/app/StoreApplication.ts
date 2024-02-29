@@ -5,6 +5,7 @@ import App from "./App.vue";
 import {createPinia, Pinia} from "pinia";
 import piniaPluginPersistedState from 'pinia-plugin-persistedstate'
 import {Settings} from "../config/Settings";
+import router from "./router/main-router";
 
 export class StoreApplication {
 
@@ -24,9 +25,14 @@ export class StoreApplication {
         Settings.entity = settings.entity;
       }
 
-      // setting entity
+      // setting product
       if(settings.product){
         Settings.product = settings.product;
+      }
+
+      // setting operation
+      if(settings.operation){
+        Settings.operation = settings.operation;
       }
 
       // container
@@ -72,6 +78,7 @@ export class StoreApplication {
     this.VueApp.use(this.Pinia);
     this.VueApp.use(BootstrapVue3);
     this.VueApp.use(BootstrapIconsPlugin);
+    this.VueApp.use(router);
     this.VueApp.mount(Settings.container);
   }
 

@@ -38,7 +38,7 @@ export default {
   methods: {
     openProductDetails(product){
       Settings.product = product.Id;
-      generalStore().actualStep = 2;
+      this.$router.push({ path: '/product/'+product.Id })
     },
     addToCart(product){
 
