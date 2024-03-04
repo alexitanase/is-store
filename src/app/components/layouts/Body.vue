@@ -3,7 +3,11 @@
 
     <div class="application-sales-body-form">
 
-      <router-view :entity="entity" />
+      <router-view :entity="entity" v-slot="{ Component }">
+        <transition name="fade" mode="out-in" :duration="100">
+          <component :is="Component" />
+        </transition>
+      </router-view>
 
       <div v-if="generalStore().actualStep === 7" class="application-sale-body-payment-method">
         <p>Confirmation</p>
