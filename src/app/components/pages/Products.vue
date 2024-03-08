@@ -24,6 +24,9 @@
       <b-row class="mt-4">
         <product-layout v-for="Product in Products" v-bind:Product="Product" :entity="entity"></product-layout>
       </b-row>
+      <b-row class="mt-4">
+        <button  v-if="LoadMoreButton" v-on:click="loadMoreItems()" class="btn btn-outline-primary w-100">Load More</button>
+      </b-row>
     </b-container>
 
   </div>
@@ -58,7 +61,10 @@ export default {
   },
   data() {
     return {
+      MaxItems: 12,
+      Page: 1,
       TimerReloadProducts: null,
+      LoadMoreButton: false,
       Filters: {
         SearchByName: "",
         OrderBy: "opt0",
@@ -111,6 +117,10 @@ export default {
     }
   },
   methods: {
+    async loadMoreItems(){
+      this.Page++;
+      await this.getProducts();
+    },
     async getProducts(){
       let Request = new RequestApi(Settings.endpoint);
       Request.add_header('Entity', Settings.entity);
@@ -119,6 +129,9 @@ export default {
       if(this.Filters.SearchByName !== ''){
         Data['k'] = this.Filters.SearchByName;
       }
+
+      Data['items'] = this.MaxItems;
+      Data['page']  = this.Page;
 
       let response = await Request.doAsync({
         method: "get",
@@ -130,7 +143,20 @@ export default {
         return false;
       }
 
-      this.Products = response.Message;
+      if(this.Page === 1){
+        this.Products = response.Message;
+      }else{
+        this.Products =  [
+            ...this.Products,
+            ...response.Message
+        ];
+      }
+
+      if(parseInt(response.Pages) > this.Page){
+        this.LoadMoreButton = true;
+      }else{
+        this.LoadMoreButton = false;
+      }
     }
   },
   async beforeMount() {
