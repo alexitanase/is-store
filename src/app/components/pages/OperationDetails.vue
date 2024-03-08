@@ -130,7 +130,7 @@ export default {
 
       this.Operation = response.Message;
 
-      if(this.Operation.Status === 'PENDING'){
+      if(this.Operation.Status !== 'PENDING'){
         clearInterval(this.timerOperationChecker);
       }
     },
