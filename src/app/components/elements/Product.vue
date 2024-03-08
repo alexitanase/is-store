@@ -56,7 +56,8 @@ export default {
           qty: product.MinPerSale,
           name: product.Name,
           price: product.Price,
-          picture: product.Picture
+          picture: product.Picture,
+          available: -1
         })
       }else{
         if(parseInt(product.MaxPerSale) > parseInt(cartStore().products[exists].qty)){

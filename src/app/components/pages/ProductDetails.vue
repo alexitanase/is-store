@@ -168,7 +168,8 @@ export default {
             qty: parseInt(this.qtySelected),
             name: product.Name,
             price: product.SalePrice,
-            picture: product.Picture
+            picture: product.Picture,
+            available: -1
           })
         }else{
           cartStore().products.push({
@@ -176,7 +177,8 @@ export default {
             qty: product.MinPerSale,
             name: product.Name,
             price: product.SalePrice,
-            picture: product.Picture
+            picture: product.Picture,
+            available: -1
           })
         }
       }else{

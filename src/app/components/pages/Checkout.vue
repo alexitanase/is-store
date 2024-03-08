@@ -99,6 +99,18 @@ export default {
     }
   },
   methods: {
+    async removeUnavailableProducts(){
+      let products = cartStore().products;
+
+      let newArray = [];
+      products.forEach(function (product, index) {
+        if (parseInt(product.available) !== 0){
+          newArray.push(product);
+        }
+      });
+
+      cartStore().products = newArray;
+    },
     async getRequiredData(){
       let Request = new RequestApi(Settings.endpoint);
       Request.add_header('Entity', Settings.entity);
@@ -209,8 +221,6 @@ export default {
         payment: this.paymentMethods[PaymentSelected].Id,
       };
 
-      console.debug(Data);
-
       let Request = new RequestApi(Settings.endpoint);
       Request.add_header('Entity', Settings.entity);
       Request.add_header('Content-Type', 'application/json');
@@ -247,6 +257,7 @@ export default {
     }
   },
   async beforeMount() {
+    await this.removeUnavailableProducts();
     await this.getRequiredData();
     await this.getPaymentMethods();
   }
